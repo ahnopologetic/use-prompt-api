@@ -41,7 +41,19 @@
     "agents",
     "react-hooks"
   ],
-  "author": "",
+  "author": "ahnopologetic <stahn1995@gmail.com>",
+  "homepage": "https://github.com/ahnopologetic/use-prompt-api",
+  "keywords": [
+    "chrome",
+    "prompt-api",
+    "ai",
+    "llm",
+    "gemini-nano",
+    "structured-output",
+    "function-calling",
+    "agents",
+    "react-hooks"
+  ],
   "license": "MIT",
   "packageManager": "pnpm@10.6.5",
   "peerDependencies": {
