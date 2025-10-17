@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Streaming Agent Example - Chrome Prompt API</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+          sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+        color: #333;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .header {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      h1 {
+        color: #667eea;
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        color: #666;
+        font-size: 14px;
+      }
+
+      .controls {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .task-input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        font-family: inherit;
+        margin-bottom: 10px;
+      }
+
+      .task-input:focus {
+        outline: none;
+        border-color: #667eea;
+      }
+
+      .button {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s;
+        margin-right: 10px;
+      }
+
+      .button:hover {
+        background: #5568d3;
+      }
+
+      .button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+
+      .output-container {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        min-height: 400px;
+      }
+
+      .iteration-block {
+        margin-bottom: 30px;
+        border-left: 4px solid #667eea;
+        padding-left: 16px;
+      }
+
+      .iteration-header {
+        font-weight: 600;
+        color: #667eea;
+        margin-bottom: 10px;
+        font-size: 16px;
+      }
+
+      .agent-response {
+        background: #f5f5f5;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 12px;
+      }
+
+      .response-label {
+        font-weight: 600;
+        color: #764ba2;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .streaming-text {
+        color: #333;
+        line-height: 1.6;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+
+      .tool-call {
+        background: #fff3cd;
+        border: 2px solid #ffc107;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 12px;
+      }
+
+      .tool-call-header {
+        font-weight: 600;
+        color: #856404;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .tool-json {
+        background: #333;
+        color: #00ff00;
+        border-radius: 6px;
+        padding: 12px;
+        font-family: 'Courier New', monospace;
+        font-size: 13px;
+        overflow-x: auto;
+        white-space: pre;
+      }
+
+      .tool-result {
+        background: #d4edda;
+        border: 2px solid #28a745;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 12px;
+      }
+
+      .tool-result.error {
+        background: #f8d7da;
+        border-color: #dc3545;
+      }
+
+      .result-header {
+        font-weight: 600;
+        color: #155724;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .result-header.error {
+        color: #721c24;
+      }
+
+      .final-answer {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-top: 20px;
+      }
+
+      .final-answer-header {
+        font-weight: 600;
+        font-size: 18px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .status {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-left: 10px;
+      }
+
+      .status.running {
+        background: #ffc107;
+        color: #856404;
+      }
+
+      .status.complete {
+        background: #28a745;
+        color: white;
+      }
+
+      .spinner {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(0, 0, 0, 0.1);
+        border-top-color: #667eea;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .example-buttons {
+        margin-top: 10px;
+      }
+
+      .example-button {
+        background: #e0e0e0;
+        color: #333;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 12px;
+        cursor: pointer;
+        margin-right: 8px;
+        margin-bottom: 8px;
+        transition: background 0.3s;
+      }
+
+      .example-button:hover {
+        background: #d0d0d0;
+      }
+
+      .clear-button {
+        background: #f44336;
+      }
+
+      .clear-button:hover {
+        background: #d32f2f;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🤖 Streaming Agent Example</h1>
+        <p class="subtitle">Chrome Prompt API with Real-time Streaming & Visual Tool Calls</p>
+      </div>
+
+      <div class="controls">
+        <input
+          type="text"
+          id="taskInput"
+          class="task-input"
+          placeholder="Enter a task for the agent..."
+          value="Get the weather for Paris and Tokyo, then calculate their temperature difference in Fahrenheit"
+        />
+        <button id="runButton" class="button">▶ Run Agent</button>
+        <button id="clearButton" class="button clear-button">🗑 Clear Output</button>
+        <span id="statusBadge"></span>
+
+        <div class="example-buttons">
+          <button class="example-button" onclick="setExample(0)">Weather Analysis</button>
+          <button class="example-button" onclick="setExample(1)">Research & Calculate</button>
+          <button class="example-button" onclick="setExample(2)">Multi-Tool Task</button>
+        </div>
+      </div>
+
+      <div class="output-container" id="output">
+        <p style="color: #999; text-align: center">Output will appear here...</p>
+      </div>
+    </div>
+    <script type="importmap">
+      {
+        "imports": {
+          "zod": "https://esm.sh/zod@3.22.4"
+        }
+      }
+    </script>
+
+    <script type="module">
+      import { SessionManager, FunctionRegistry, createFunctionDefinition } from './dist/index.js';
+      import {
+        parseFunctionCall,
+        buildFunctionSystemPrompt,
+        formatFunctionResult,
+      } from './dist/index.js';
+      import { executeFunctionCall } from './dist/index.js';
+      import { StreamProcessor } from './dist/index.js';
+
+      const examples = [
+        'Get the weather for Paris and Tokyo, then calculate their temperature difference in Fahrenheit',
+        'Search for information about AI trends, then calculate 25 * 8 + 100',
+        'Get the weather in London, search for climate information, and calculate the average temperature',
+      ];
+
+      window.setExample = (index) => {
+        document.getElementById('taskInput').value = examples[index];
+      };
+
+      // Define functions
+      const weatherFunction = createFunctionDefinition(
+        'getWeather',
+        'Get current weather for a location',
+        {
+          type: 'object',
+          properties: {
+            location: { type: 'string', description: 'City name' },
+            units: {
+              type: 'string',
+              enum: ['celsius', 'fahrenheit'],
+              description: 'Temperature units',
+            },
+          },
+          required: ['location'],
+        },
+        async ({ location, units = 'celsius' }) => {
+          await new Promise((resolve) => setTimeout(resolve, 800));
+
+          const mockWeather = {
+            Paris: { celsius: 18, fahrenheit: 64, condition: 'Cloudy', humidity: 65 },
+            Tokyo: { celsius: 24, fahrenheit: 75, condition: 'Sunny', humidity: 50 },
+            'New York': { celsius: 22, fahrenheit: 72, condition: 'Rainy', humidity: 80 },
+            London: { celsius: 15, fahrenheit: 59, condition: 'Foggy', humidity: 75 },
+          };
+
+          const weather = mockWeather[location] || {
+            celsius: 20,
+            fahrenheit: 68,
+            condition: 'Unknown',
+            humidity: 60,
+          };
+
+          const temp = units === 'fahrenheit' ? weather.fahrenheit : weather.celsius;
+          const unit = units === 'fahrenheit' ? '°F' : '°C';
+
+          return {
+            location,
+            temperature: temp,
+            unit,
+            condition: weather.condition,
+            humidity: weather.humidity,
+          };
+        }
+      );
+
+      const searchFunction = createFunctionDefinition(
+        'search',
+        'Search for information on a topic',
+        {
+          type: 'object',
+          properties: {
+            query: { type: 'string', description: 'Search query' },
+            category: {
+              type: 'string',
+              enum: ['news', 'science', 'general'],
+              description: 'Search category',
+            },
+          },
+          required: ['query'],
+        },
+        async ({ query, category = 'general' }) => {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+
+          return {
+            query,
+            category,
+            results: [
+              `Result 1 about ${query}`,
+              `Recent development in ${query}`,
+              `Expert opinion on ${query}`,
+            ],
+            resultCount: 3,
+          };
+        }
+      );
+
+      const calculateFunction = createFunctionDefinition(
+        'calculate',
+        'Perform mathematical calculations',
+        {
+          type: 'object',
+          properties: {
+            expression: { type: 'string', description: 'Math expression to evaluate' },
+          },
+          required: ['expression'],
+        },
+        async ({ expression }) => {
+          try {
+            const sanitized = expression.replace(/[^0-9+\-*/().\s]/g, '');
+            const result = eval(sanitized);
+            return { expression, result };
+          } catch {
+            return { expression, error: 'Invalid expression' };
+          }
+        }
+      );
+
+      // Streaming agent class
+      class StreamingAgent {
+        constructor(config) {
+          this.session = null;
+          this.registry = new FunctionRegistry();
+          this.registry.registerMultiple(config.functions);
+          this.systemPrompt =
+            config.systemPrompt || 'You are a helpful AI assistant with access to tools.';
+          this.maxIterations = config.maxIterations || 10;
+        }
+
+        async run(task, onUpdate) {
+          this.session = new SessionManager();
+
+          const fullSystemPrompt = `${this.systemPrompt}\n\n${buildFunctionSystemPrompt(this.registry)}`;
+
+          await this.session.create({
+            systemPrompt: fullSystemPrompt,
+            enablePersistence: false,
+          });
+
+          let currentPrompt = task;
+          let iteration = 0;
+
+          while (iteration < this.maxIterations) {
+            iteration++;
+
+            onUpdate({ type: 'iteration', iteration });
+
+            // Stream the response
+            const stream = this.session.promptStreaming(currentPrompt);
+            const processor = new StreamProcessor(stream);
+
+            let fullResponse = '';
+
+            for await (const chunk of processor.iterate()) {
+              fullResponse = chunk;
+              onUpdate({ type: 'streaming', text: chunk, iteration });
+            }
+
+            // Parse for function calls
+            const parsed = parseFunctionCall(fullResponse);
+
+            if (parsed.functionCall) {
+              if (parsed.reasoning) {
+                onUpdate({ type: 'reasoning', text: parsed.reasoning, iteration });
+              }
+
+              onUpdate({
+                type: 'tool_call',
+                name: parsed.functionCall.name,
+                args: parsed.functionCall.arguments,
+                iteration,
+              });
+
+              const result = await executeFunctionCall(parsed.functionCall, this.registry);
+
+              onUpdate({
+                type: 'tool_result',
+                result: result.result || result.error,
+                success: result.success,
+                iteration,
+              });
+
+              const formattedResult = formatFunctionResult(
+                parsed.functionCall.name,
+                result.result || result.error,
+                result.success
+              );
+
+              currentPrompt = `${formattedResult}\n\nContinue with the task. If the task is complete, provide your final answer without calling any functions.`;
+            } else {
+              const isComplete = this.isTaskComplete(fullResponse);
+
+              if (isComplete) {
+                onUpdate({ type: 'complete', answer: fullResponse, iteration });
+                break;
+              }
+
+              currentPrompt = 'Continue with the task.';
+            }
+          }
+
+          this.session.destroy();
+        }
+
+        isTaskComplete(response) {
+          const completionIndicators = [
+            'task is complete',
+            'task complete',
+            'finished',
+            'final answer',
+            'in conclusion',
+            'to summarize',
+          ];
+
+          const lowerResponse = response.toLowerCase();
+          return completionIndicators.some((indicator) => lowerResponse.includes(indicator));
+        }
+      }
+
+      // UI Management
+      let currentIteration = null;
+
+      function updateStatus(text, isRunning) {
+        const badge = document.getElementById('statusBadge');
+        badge.innerHTML = `<span class="status ${isRunning ? 'running' : 'complete'}">${text}</span>`;
+      }
+
+      function createIterationBlock(iteration) {
+        const block = document.createElement('div');
+        block.className = 'iteration-block';
+        block.id = `iteration-${iteration}`;
+        block.innerHTML = `<div class="iteration-header">🔄 Iteration ${iteration}</div>`;
+        return block;
+      }
+
+      function addAgentResponse(iteration, text) {
+        let block = document.getElementById(`iteration-${iteration}`);
+        if (!block) {
+          block = createIterationBlock(iteration);
+          document.getElementById('output').appendChild(block);
+        }
+
+        let responseDiv = block.querySelector('.agent-response');
+        if (!responseDiv) {
+          responseDiv = document.createElement('div');
+          responseDiv.className = 'agent-response';
+          responseDiv.innerHTML = `
+          <div class="response-label">🤖 Agent Response <span class="spinner"></span></div>
+          <div class="streaming-text"></div>
+        `;
+          block.appendChild(responseDiv);
+        }
+
+        const textDiv = responseDiv.querySelector('.streaming-text');
+        textDiv.textContent += text;
+      }
+
+      function finalizeResponse(iteration) {
+        const block = document.getElementById(`iteration-${iteration}`);
+        if (block) {
+          const spinner = block.querySelector('.spinner');
+          if (spinner) spinner.remove();
+        }
+      }
+
+      function addToolCall(iteration, name, args) {
+        const block = document.getElementById(`iteration-${iteration}`);
+        if (block) {
+          finalizeResponse(iteration);
+          const toolDiv = document.createElement('div');
+          toolDiv.className = 'tool-call';
+          toolDiv.innerHTML = `
+          <div class="tool-call-header">🔧 Tool Call: ${name}</div>
+          <div class="tool-json">${JSON.stringify(args, null, 2)}</div>
+        `;
+          block.appendChild(toolDiv);
+        }
+      }
+
+      function addToolResult(iteration, result, success) {
+        const block = document.getElementById(`iteration-${iteration}`);
+        if (block) {
+          const resultDiv = document.createElement('div');
+          resultDiv.className = `tool-result ${success ? '' : 'error'}`;
+          resultDiv.innerHTML = `
+          <div class="result-header ${success ? '' : 'error'}">${success ? '✅' : '❌'} Tool Result</div>
+          <div class="tool-json">${JSON.stringify(result, null, 2)}</div>
+        `;
+          block.appendChild(resultDiv);
+        }
+      }
+
+      function addFinalAnswer(answer) {
+        const output = document.getElementById('output');
+        const finalDiv = document.createElement('div');
+        finalDiv.className = 'final-answer';
+        finalDiv.innerHTML = `
+        <div class="final-answer-header">✨ Task Complete - Final Answer</div>
+        <div>${answer}</div>
+      `;
+        output.appendChild(finalDiv);
+      }
+
+      // Run agent
+      async function runAgent() {
+        const taskInput = document.getElementById('taskInput');
+        const task = taskInput.value.trim();
+
+        if (!task) {
+          alert('Please enter a task');
+          return;
+        }
+
+        const runButton = document.getElementById('runButton');
+        const output = document.getElementById('output');
+
+        output.innerHTML = '';
+        runButton.disabled = true;
+        updateStatus('Running...', true);
+
+        try {
+          const agent = new StreamingAgent({
+            functions: [weatherFunction, searchFunction, calculateFunction],
+            systemPrompt:
+              'You are a helpful research assistant with access to weather data, search capabilities, and calculation tools.',
+            maxIterations: 8,
+          });
+
+          await agent.run(task, (event) => {
+            switch (event.type) {
+              case 'iteration':
+                currentIteration = event.iteration;
+                break;
+              case 'streaming':
+                addAgentResponse(event.iteration, event.text);
+                break;
+              case 'reasoning':
+                // Could add reasoning display here
+                break;
+              case 'tool_call':
+                addToolCall(event.iteration, event.name, event.args);
+                break;
+              case 'tool_result':
+                addToolResult(event.iteration, event.result, event.success);
+                break;
+              case 'complete':
+                finalizeResponse(event.iteration);
+                addFinalAnswer(event.answer);
+                break;
+            }
+          });
+
+          updateStatus('Complete', false);
+        } catch (error) {
+          output.innerHTML = `<div style="color: red; padding: 20px;">Error: ${error.message}</div>`;
+          updateStatus('Error', false);
+        } finally {
+          runButton.disabled = false;
+        }
+      }
+
+      // Event listeners
+      document.getElementById('runButton').addEventListener('click', runAgent);
+      document.getElementById('clearButton').addEventListener('click', () => {
+        document.getElementById('output').innerHTML =
+          '<p style="color: #999; text-align: center;">Output will appear here...</p>';
+        document.getElementById('statusBadge').innerHTML = '';
+      });
+
+      document.getElementById('taskInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          runAgent();
+        }
+      });
+    </script>
+  </body>
+</html>
