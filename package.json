@@ -1,6 +1,6 @@
 {
   "name": "@ahnopologetic/use-prompt-api",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A TypeScript library for Chrome's built-in Prompt API with structured output, function calling, and agentic workflows",
   "type": "module",
   "main": "./dist/index.cjs",
