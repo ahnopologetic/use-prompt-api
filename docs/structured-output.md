@@ -16,7 +16,7 @@ Extract type-safe, validated data from AI responses using Zod schemas.
 
 ```typescript
 import { z } from 'zod';
-import { promptWithStructure } from 'use-prompt-api';
+import { promptWithStructure } from '@ahnopologetic/use-prompt-api';
 
 const personSchema = z.object({
   name: z.string(),
@@ -38,7 +38,7 @@ console.log(person.age); // number
 ### With React Hook
 
 ```typescript
-import { useStructuredPrompt } from 'use-prompt-api/react';
+import { useStructuredPrompt } from '@ahnopologetic/use-prompt-api/react';
 
 function Component() {
   const { prompt, data } = useStructuredPrompt({
@@ -110,7 +110,7 @@ import {
   sentimentSchema,
   summarySchema,
   classificationSchema,
-} from 'use-prompt-api';
+} from '@ahnopologetic/use-prompt-api';
 
 // Sentiment analysis
 const sentiment = await promptWithStructure(
@@ -218,7 +218,7 @@ const dateSchema = z.object({
 ### Custom Schemas
 
 ```typescript
-import { createStructuredOutput } from 'use-prompt-api';
+import { createStructuredOutput } from '@ahnopologetic/use-prompt-api';
 
 const mySchema = z.object({
   id: z.string().uuid(),

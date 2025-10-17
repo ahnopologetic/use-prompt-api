@@ -7,7 +7,7 @@
  * 
  * @example
  * ```typescript
- * import { PromptClient } from 'use-prompt-api';
+ * import { PromptClient } from '@ahnopologetic/use-prompt-api';
  * 
  * const client = new PromptClient();
  * await client.initialize();

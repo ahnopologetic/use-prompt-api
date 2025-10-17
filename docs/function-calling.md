@@ -25,7 +25,7 @@ Function calling allows the AI to invoke predefined functions to:
 ### Basic Function
 
 ```typescript
-import { createFunctionDefinition } from 'use-prompt-api';
+import { createFunctionDefinition } from '@ahnopologetic/use-prompt-api';
 
 const getTimeFunction = createFunctionDefinition(
   'getCurrentTime',
@@ -72,7 +72,7 @@ const weatherFunction = createFunctionDefinition(
 ### Helper for Parameters
 
 ```typescript
-import { createParameters } from 'use-prompt-api';
+import { createParameters } from '@ahnopologetic/use-prompt-api';
 
 const params = createParameters(
   {
@@ -88,7 +88,7 @@ const params = createParameters(
 ### Creating and Managing Registry
 
 ```typescript
-import { FunctionRegistry } from 'use-prompt-api';
+import { FunctionRegistry } from '@ahnopologetic/use-prompt-api';
 
 const registry = new FunctionRegistry();
 
@@ -114,7 +114,7 @@ registry.unregister('oldFunction');
 ### Built-in Functions
 
 ```typescript
-import { builtInFunctions } from 'use-prompt-api';
+import { builtInFunctions } from '@ahnopologetic/use-prompt-api';
 
 registry.register(builtInFunctions.getCurrentTime);
 registry.register(builtInFunctions.calculateMath);
@@ -125,7 +125,7 @@ registry.register(builtInFunctions.calculateMath);
 ### Basic Agent
 
 ```typescript
-import { BasicAgent } from 'use-prompt-api';
+import { BasicAgent } from '@ahnopologetic/use-prompt-api';
 
 const agent = new BasicAgent({
   maxIterations: 10,
@@ -144,7 +144,7 @@ const result = await agent.run('What time is it in Tokyo and what is the weather
 ### Manual Execution
 
 ```typescript
-import { executeFunctionCall, parseFunctionCall } from 'use-prompt-api';
+import { executeFunctionCall, parseFunctionCall } from '@ahnopologetic/use-prompt-api';
 
 // Get AI response
 const response = await session.prompt(promptWithFunctions);
@@ -167,7 +167,7 @@ if (parsed.functionCall) {
 ### Using the Hook
 
 ```typescript
-import { useFunctionCalling } from 'use-prompt-api/react';
+import { useFunctionCalling } from '@ahnopologetic/use-prompt-api/react';
 
 function Assistant() {
   const { prompt, results, loading } = useFunctionCalling({

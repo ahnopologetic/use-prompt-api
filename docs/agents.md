@@ -16,7 +16,7 @@ Build autonomous AI agents that can plan, execute, and reflect on multi-turn tas
 ### Simple Task Execution
 
 ```typescript
-import { BasicAgent } from 'use-prompt-api';
+import { BasicAgent } from '@ahnopologetic/use-prompt-api';
 
 const agent = new BasicAgent({
   maxIterations: 10,
@@ -53,7 +53,7 @@ const steps = agent.getSteps();
 ### With Planning
 
 ```typescript
-import { AdvancedAgent } from 'use-prompt-api';
+import { AdvancedAgent } from '@ahnopologetic/use-prompt-api';
 
 const agent = new AdvancedAgent({
   maxIterations: 20,
@@ -136,7 +136,7 @@ const config: AdvancedAgentConfig = {
 ### Built-in Conditions
 
 ```typescript
-import { StoppingConditions } from 'use-prompt-api';
+import { StoppingConditions } from '@ahnopologetic/use-prompt-api';
 
 // Stop after N function calls
 const agent = new BasicAgent({
@@ -181,7 +181,7 @@ const agent = new BasicAgent({
 ### Retry Strategy
 
 ```typescript
-import { createRetryStrategy } from 'use-prompt-api';
+import { createRetryStrategy } from '@ahnopologetic/use-prompt-api';
 
 const retryStrategy = createRetryStrategy(3);
 
@@ -214,7 +214,7 @@ const agent = new BasicAgent({
 ### Basic Agent Hook
 
 ```typescript
-import { useAgent } from 'use-prompt-api/react';
+import { useAgent } from '@ahnopologetic/use-prompt-api/react';
 
 function AgentComponent() {
   const { run, stop, status, steps, progress } = useAgent({
@@ -237,7 +237,7 @@ function AgentComponent() {
 ### Advanced Agent Hook
 
 ```typescript
-import { useAdvancedAgent } from 'use-prompt-api/react';
+import { useAdvancedAgent } from '@ahnopologetic/use-prompt-api/react';
 
 function AdvancedAgentComponent() {
   const { runWithPlanning, reflect, replan, reflectionCount } = useAdvancedAgent({

@@ -5,7 +5,7 @@
  * 
  * @example
  * ```typescript
- * import { usePromptAPI } from 'use-prompt-api/react';
+ * import { usePromptAPI } from '@ahnopologetic/use-prompt-api/react';
  * 
  * function ChatComponent() {
  *   const { prompt, ready, loading } = usePromptAPI({

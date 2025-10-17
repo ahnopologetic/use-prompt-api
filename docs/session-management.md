@@ -16,7 +16,7 @@ This guide covers best practices for managing sessions with the Chrome Prompt AP
 ### Basic Session
 
 ```typescript
-import { SessionManager } from 'use-prompt-api';
+import { SessionManager } from '@ahnopologetic/use-prompt-api';
 
 const manager = new SessionManager();
 await manager.create({
@@ -58,7 +58,7 @@ await manager.prompt('Hello!');
 ### Managing Storage
 
 ```typescript
-import { SessionStorage } from 'use-prompt-api';
+import { SessionStorage } from '@ahnopologetic/use-prompt-api';
 
 const storage = new SessionStorage();
 

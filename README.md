@@ -16,11 +16,11 @@ A comprehensive TypeScript library for Chrome's built-in Prompt API with advance
 ## Installation
 
 ```bash
-npm install use-prompt-api zod
+npm install @ahnopologetic/use-prompt-api zod
 # or
-pnpm add use-prompt-api zod
+pnpm add @ahnopologetic/use-prompt-api zod
 # or
-yarn add use-prompt-api zod
+yarn add @ahnopologetic/use-prompt-api zod
 ```
 
 ## Prerequisites
@@ -32,7 +32,7 @@ This library requires Chrome 128+ with the Prompt API origin trial enabled. Lear
 ### Basic Usage
 
 ```typescript
-import { PromptClient } from 'use-prompt-api';
+import { PromptClient } from '@ahnopologetic/use-prompt-api';
 
 // Initialize the client
 const client = new PromptClient();
@@ -66,7 +66,7 @@ while (true) {
 
 ```typescript
 import { z } from 'zod';
-import { promptWithStructure } from 'use-prompt-api';
+import { promptWithStructure } from '@ahnopologetic/use-prompt-api';
 
 const personSchema = z.object({
   name: z.string(),
@@ -86,7 +86,7 @@ console.log(result); // { name: 'John Doe', age: 30, email: 'john@example.com' }
 ### Function Calling
 
 ```typescript
-import { FunctionRegistry, createFunctionDefinition } from 'use-prompt-api';
+import { FunctionRegistry, createFunctionDefinition } from '@ahnopologetic/use-prompt-api';
 
 const registry = new FunctionRegistry();
 
@@ -112,7 +112,7 @@ registry.register(
 ### Basic Agent
 
 ```typescript
-import { BasicAgent } from 'use-prompt-api';
+import { BasicAgent } from '@ahnopologetic/use-prompt-api';
 
 const agent = new BasicAgent({
   maxIterations: 10,
@@ -128,7 +128,7 @@ console.log(result.finalAnswer);
 ### Advanced Agent with Planning
 
 ```typescript
-import { AdvancedAgent } from 'use-prompt-api';
+import { AdvancedAgent } from '@ahnopologetic/use-prompt-api';
 
 const agent = new AdvancedAgent({
   maxIterations: 20,
@@ -145,7 +145,7 @@ const result = await agent.runWithPlanning('Research and summarize AI trends in 
 ### Basic Hook
 
 ```tsx
-import { usePromptAPI } from 'use-prompt-api/react';
+import { usePromptAPI } from '@ahnopologetic/use-prompt-api/react';
 
 function ChatComponent() {
   const { prompt, ready, loading, error, quota } = usePromptAPI({
@@ -174,7 +174,7 @@ function ChatComponent() {
 ### Structured Output Hook
 
 ```tsx
-import { useStructuredPrompt } from 'use-prompt-api/react';
+import { useStructuredPrompt } from '@ahnopologetic/use-prompt-api/react';
 import { z } from 'zod';
 
 const taskSchema = z.object({
@@ -200,7 +200,7 @@ function TaskExtractor() {
 ### Function Calling Hook
 
 ```tsx
-import { useFunctionCalling } from 'use-prompt-api/react';
+import { useFunctionCalling } from '@ahnopologetic/use-prompt-api/react';
 
 function AssistantComponent() {
   const { prompt, results, loading } = useFunctionCalling({
@@ -215,7 +215,7 @@ function AssistantComponent() {
 ### Agent Hook
 
 ```tsx
-import { useAgent } from 'use-prompt-api/react';
+import { useAgent } from '@ahnopologetic/use-prompt-api/react';
 
 function AgentComponent() {
   const { run, steps, status, progress } = useAgent({

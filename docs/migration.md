@@ -9,7 +9,7 @@ This library is designed to be flexible as the Chrome Prompt API evolves. Here's
 ## Version Detection
 
 ```typescript
-import { getCapabilities } from 'use-prompt-api';
+import { getCapabilities } from '@ahnopologetic/use-prompt-api';
 
 const capabilities = await getCapabilities();
 
@@ -25,7 +25,7 @@ if (capabilities) {
 ### Check Feature Availability
 
 ```typescript
-import { checkPromptAPIAvailability, isFeatureAvailable } from 'use-prompt-api';
+import { checkPromptAPIAvailability, isFeatureAvailable } from '@ahnopologetic/use-prompt-api';
 
 const status = await checkPromptAPIAvailability();
 
@@ -78,7 +78,7 @@ class APIAdapter {
 ### Version-Specific Code
 
 ```typescript
-import { getCapabilities } from 'use-prompt-api';
+import { getCapabilities } from '@ahnopologetic/use-prompt-api';
 
 const capabilities = await getCapabilities();
 
@@ -115,7 +115,7 @@ Don't access Chrome API directly:
 const model = await window.ai.languageModel.create();
 
 // ✅ Good - Use library abstraction
-import { PromptClient } from 'use-prompt-api';
+import { PromptClient } from '@ahnopologetic/use-prompt-api';
 const client = new PromptClient();
 ```
 
@@ -197,7 +197,7 @@ const response = await session.prompt(input);
 If you need to support older Chrome versions:
 
 ```typescript
-import { checkPromptAPIAvailability } from 'use-prompt-api';
+import { checkPromptAPIAvailability } from '@ahnopologetic/use-prompt-api';
 
 async function getChatInterface() {
   const status = await checkPromptAPIAvailability();

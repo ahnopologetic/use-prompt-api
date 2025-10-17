@@ -2,7 +2,7 @@
 
 ## ✅ Completed Implementation
 
-This document summarizes the complete implementation of the `use-prompt-api` library according to the approved plan.
+This document summarizes the complete implementation of the `@ahnopologetic/use-prompt-api` library according to the approved plan.
 
 ### 📦 Project Structure
 
@@ -206,7 +206,7 @@ use-prompt-api/
 
 ### Basic Usage
 ```typescript
-import { PromptClient } from 'use-prompt-api';
+import { PromptClient } from '@ahnopologetic/use-prompt-api';
 
 const client = new PromptClient();
 await client.initialize();
@@ -216,7 +216,7 @@ const response = await session.prompt('Hello!');
 
 ### React Hook
 ```typescript
-import { usePromptAPI } from 'use-prompt-api/react';
+import { usePromptAPI } from '@ahnopologetic/use-prompt-api/react';
 
 function Chat() {
   const { prompt, ready } = usePromptAPI();
@@ -226,7 +226,7 @@ function Chat() {
 
 ### Structured Output
 ```typescript
-import { promptWithStructure } from 'use-prompt-api';
+import { promptWithStructure } from '@ahnopologetic/use-prompt-api';
 import { z } from 'zod';
 
 const schema = z.object({ name: z.string(), age: z.number() });
@@ -235,7 +235,7 @@ const result = await promptWithStructure(session, prompt, { schema });
 
 ### Function Calling
 ```typescript
-import { BasicAgent } from 'use-prompt-api';
+import { BasicAgent } from '@ahnopologetic/use-prompt-api';
 
 const agent = new BasicAgent({
   functions: [weatherFunction, calculatorFunction],
